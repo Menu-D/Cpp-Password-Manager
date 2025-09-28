@@ -1,18 +1,16 @@
 #include <iostream> 
 #include <string> 
 #include <vector> 
+#include <sodium.h>
 
-
-class User
+class PasswordManager
 {
 public: 
-	struct account
+	struct Account
 	{
 		std::string username;
 		std::string password;
 	};
-
-	std::vector<account> accounts; 
 
 	// XOR encryption / decryption function 
 	std::string xor_encrypt_decrypt(const std::string& input, char key)
@@ -42,66 +40,63 @@ public:
 		}
 	}
 
+private: 
+	std::vector<Account> accounts;
 }; 
 
 int main()
 {
-	bool decode; 
-	char answer; 
-
-	// Class objects 
-	User u1; 
+	
+	PasswordManager passwordmanager;
 	std::string user, pass; 
-	// Class objects 
-
 	
 	char key;
 
-		while (true)
+		while (false)
 		{
 			int choice;
 
 			std::cout << "Password Manager \n"; 
-			std::cout << "\n";
-			std::cout << "Enter new user/pass (1) " << '\n';
-			std::cout << "\n";
-			std::cout << "Check existing user/pass (2) " << '\n';
-			std::cout << "\n";
-			std::cout << "Exit (3) " << '\n'; 
-			std::cout << "\n";
+			std::cout << "Enter new user/pass (1) " << std::endl;
+			std::cout << "Check existing user/pass (2) " << std::endl;
+			std::cout << "Exit (3) " << std::endl;
 
-			std::cout << "Select one of the choices above: " << '\n';
+			std::cout << "Select one of the choices above: " << std::endl;
 			std::cin >> choice;
 
 			if (choice == 1) 
 			{
 				std::cout << "Please enter your encryption key: "; 
 				std::cin >> key; 
-				std::cout << "\n"; 
+
 				std::cout << "please enter your username: ";
-				std::cin >> user;
+				std::getline(std::cin, user); 
+
 				std::cout << "\n";
 				std::cout << "please enter your password: ";
 				std::cin >> pass;
 
-				u1.addAccount(user, pass, key);
-				std::cout << "\n";
+				passwordmanager.addAccount(user, pass, key);
+				
 				std::cout << "Your account was successfully added!\n"; 
 			}
 			else if (choice == 2) 
 			{
 				std::cout << "Please enter the decryption key: "; 
 				std::cin >> key; 
-				u1.showAccounts(key); 
+				passwordmanager.showAccounts(key);
 			}
 			else if (choice == 3) 
 			{
 				break; 
 			}
 			else {
-				std::cout << "Invalid choice.\n"; 
+				std::cout << "Invalid choice." << std::endl;
 			}
 
+
+			if (sodium_init() < 0) return 1; 
+			std::cout << "libsodium intialized successfully!\n"; 
 			
 		}
 	return 0; 
