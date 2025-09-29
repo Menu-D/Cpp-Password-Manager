@@ -1,15 +1,12 @@
 #include "cui.h"
-#include "Log.h"
+#include "log.h"
 #include <iostream> 
 #include <string>
 #include <vector> 
 
 Vault VH;
 
-class RunProgram
-{
-public:
-    void runProgram()
+    void RunProgram::runProgram()
     {
         while (true)
         {
@@ -64,4 +61,5 @@ public:
             }
         }
     }
-};
+
+    
