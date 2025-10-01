@@ -2,7 +2,7 @@
 #include <vector>
 #include <sodium.h>
 #include <string>
-#include "database.h"
+
 
 class CryptoHandler
 {
@@ -38,12 +38,9 @@ public:
 
 class Vault
 {
-    CryptoHandler CH; // Trying to give vault its own cryptohandler instance. 
-    Database* db; // This is an optional link to DB. 
+    CryptoHandler CH; // Trying to give vault its own cryptohandler instance 
 
 public:
-
-    Vault(Database* database = nullptr) : db(database) {}
 
     void addAccount(const std::string& username, const std::string& password, const std::string& masterPassphrase);
 

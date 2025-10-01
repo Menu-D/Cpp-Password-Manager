@@ -1,3 +1,21 @@
+/*
+
+ignore this file ignore this file ignore this file ignore this file 
+ignore this file ignore this file ignore this file ignore this file
+ignore this file ignore this file ignore this file ignore this file
+ignore this file ignore this file ignore this file ignore this file
+ignore this file ignore this file ignore this file ignore this file 
+ignore this file ignore this file ignore this file ignore this file
+ignore this file ignore this file ignore this file ignore this file
+ignore this file ignore this file ignore this file ignore this file
+ignore this file ignore this file ignore this file ignore this file
+ignore this file ignore this file ignore this file ignore this file 
+ignore this file ignore this file ignore this file ignore this file
+ignore this file ignore this file ignore this file ignore this file
+ignore this file ignore this file
+*/
+
+
 #include "database.h"
 #include <iostream> 
 

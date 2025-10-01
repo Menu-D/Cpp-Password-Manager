@@ -1,3 +1,21 @@
+/*
+
+ignore this file ignore this file ignore this file ignore this file
+ignore this file ignore this file ignore this file ignore this file
+ignore this file ignore this file ignore this file ignore this file
+ignore this file ignore this file ignore this file ignore this file
+ignore this file ignore this file ignore this file ignore this file
+ignore this file ignore this file ignore this file ignore this file
+ignore this file ignore this file ignore this file ignore this file
+ignore this file ignore this file ignore this file ignore this file
+ignore this file ignore this file ignore this file ignore this file
+ignore this file ignore this file ignore this file ignore this file
+ignore this file ignore this file ignore this file ignore this file
+ignore this file ignore this file ignore this file ignore this file
+ignore this file ignore this file
+*/
+
+
 #pragma once
 #include <winsqlite/winsqlite3.h>
 #include "log.h"

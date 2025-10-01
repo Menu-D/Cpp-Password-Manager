@@ -46,63 +46,43 @@ bool CryptoHandler::decrypt_string(const std::vector<unsigned char>& cipher,
 // Vault methods
 void Vault::addAccount(const std::string& username, const std::string& password, const std::string& masterPassphrase)
 {
-    CryptoHandler::Account acc;
+    CryptoHandler::Account a;
 
-    // This generates a random salt + nonces
-    randombytes_buf(acc.salt, sizeof acc.salt);
-    randombytes_buf(acc.nonce_user, sizeof acc.nonce_user);
-    randombytes_buf(acc.nonce_pass, sizeof acc.nonce_pass);
+    // Generate random salt + nonces
+    randombytes_buf(a.salt, sizeof a.salt);
+    randombytes_buf(a.nonce_user, sizeof a.nonce_user);
+    randombytes_buf(a.nonce_pass, sizeof a.nonce_pass);
 
     // Derive key
     unsigned char key[crypto_secretbox_KEYBYTES];
-    if (!CH.derive_key_from_passphrase(masterPassphrase, acc.salt, key))
+    if (!CH.derive_key_from_passphrase(masterPassphrase, a.salt, key))
     {
         std::cerr << "[!] Key derivation failed\n";
         return;
     }
 
-    // This encrypts the username and password
-    acc.ciphertext_user = CH.encrypt_string(username, acc.nonce_user, key);
-    acc.ciphertext_pass = CH.encrypt_string(password, acc.nonce_pass, key);
+    // Encrypt username + password
+    a.ciphertext_user = CH.encrypt_string(username, a.nonce_user, key);
+    a.ciphertext_pass = CH.encrypt_string(password, a.nonce_pass, key);
 
     // Store account
-    CH.accounts.push_back(acc);
+    CH.accounts.push_back(a);
 
-    if (db)
-    {
-        if (!db->insertAccount(acc))
-        {
-            std::cerr << "[!] Failed to save account to database! \n"; 
-        }
-    }
-
-    // This is the wipe key
+    // Wipe key
     sodium_memzero(key, sizeof key);
 }
 
 void Vault::showAccounts(const std::string& masterPassphrase)
 {
-
-    std::vector<CryptoHandler::Account> sourceAccounts;
-
-    if (db)
-    {
-        db->fetchAccounts(sourceAccounts);
-    }
-    else
-    {
-        sourceAccounts = CH.accounts; 
-    }
-
-    if (sourceAccounts.empty())
+    if (CH.accounts.empty())
     {
         std::cout << "No accounts stored.\n";
         return;
     }
 
-    for (size_t i = 0; i < sourceAccounts.size(); ++i)
+    for (size_t i = 0; i < CH.accounts.size(); ++i)
     {
-        const auto& a = sourceAccounts[i]; 
+        const CryptoHandler::Account& a = CH.accounts[i];
 
         unsigned char key[crypto_secretbox_KEYBYTES];
         if (!CH.derive_key_from_passphrase(masterPassphrase, a.salt, key))

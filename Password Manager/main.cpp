@@ -1,20 +1,9 @@
-#include <iostream> 
+#include "log.h"
 #include "cui.h"
-#include "database.h"
-#include <winsqlite/winsqlite3.h>
-
 
 int main()
 {
-	Database db; 
-	if (!db.open("vault.db"))
-	{
-		std::cerr << "failed to open the database.\n"; 
-		return 1; 
-	}
-
-	Vault vault(&db); 
-	RunProgram runner(); 
-	runner.runProgram(); 
-	return 0; 
+    RunProgram app; // What this does is it creates an object of my CUI 
+    app.runProgram(); // This calls the memeber function which makes the loop run 
+    return 0;
 }
