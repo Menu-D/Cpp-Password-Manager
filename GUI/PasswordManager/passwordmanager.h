@@ -2,15 +2,14 @@
 #define PASSWORDMANAGER_H
 
 #include <string>
+#include <sodium.h>
 
 class PasswordManager {
 public:
-    PasswordManager(const std::string& key);
-    bool storePassword(const std::string& service, const std::string& username, const std::string& password);
-    std::string retrievePassword(const std::string& service, const std::string& username);
+    PasswordManager();
 
-private:
-    std::string masterKey;
+    std::string encryptPassword(const std::string& password, const std::string& key);
+    std::string decryptPassword(const std::string& cipher, const std::string& key);
 };
 
 #endif // PASSWORDMANAGER_H

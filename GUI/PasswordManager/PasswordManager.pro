@@ -26,4 +26,5 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-
+INCLUDEPATH += C:/Users/user/Desktop/VCPKG/vcpkg/installed/x64-windows/include
+LIBS += -LC:/Users/user/Desktop/VCPKG/vcpkg/installed/x64-windows/lib -lsodium
