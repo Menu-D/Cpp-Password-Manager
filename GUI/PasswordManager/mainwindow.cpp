@@ -41,6 +41,24 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->GetPasswordButton, &QPushButton::clicked,
             this, &MainWindow::onGetPasswordClicked);
+
+    connect(ui->SetMasterPasswordButton, &QPushButton::clicked,
+            this, [this]() {
+                QString master = ui->MasterPassword->text();
+                if(master.isEmpty()) {
+                    ui->StatusLabel->setText("Enter a master password first!");
+                    return;
+                }
+
+                try {
+                    sessionKey = deriveKey(master); // This uses the same deriveKey function
+                    keySet = true;
+                    ui->MasterPassword->clear();    // This clears the input
+                    ui->StatusLabel->setText("Master password set for this session.");
+                } catch (const std::exception &e) {
+                    ui->StatusLabel->setText("Error: " + QString::fromStdString(e.what()));
+                }
+            });
 }
 
 MainWindow::~MainWindow()
@@ -50,24 +68,21 @@ MainWindow::~MainWindow()
 
 void MainWindow::onSavePasswordClicked()
 {
+    if(!keySet) {
+        ui->StatusLabel->setText("Set a master password first!");
+        return;
+    }
+
     QString service = ui->Service->text();
     QString username = ui->Username->text();
     QString password = ui->Password->text();
-    QString master = ui -> MasterPassword -> text();
 
-    // Encrypt + save (for now, just memory)
     try {
-        std::string key(crypto_secretbox_KEYBYTES, 'K'); // temporary key
-        std::string encrypted = pm.encryptPassword(password.toStdString(), key);
-
-        // Temporary storage in Map
+        std::string encrypted = pm.encryptPassword(password.toStdString(), sessionKey);
         passwordStore[{service.toStdString(), username.toStdString()}] = encrypted;
-        // store somewhere (in-memory map, db later)
-        // For now: just show success
+
         ui->StatusLabel->setText("Password saved for " + service);
-
-        ui->Password-> clear(); //<- This clears the password field
-
+        ui->Password->clear();
     } catch (const std::exception &e) {
         ui->StatusLabel->setText("Error: " + QString::fromStdString(e.what()));
     }
@@ -75,23 +90,24 @@ void MainWindow::onSavePasswordClicked()
 
 void MainWindow::onGetPasswordClicked()
 {
+    if(!keySet) {
+        ui->StatusLabel->setText("Set a master password first!");
+        return;
+    }
+
     QString service = ui->Service->text();
     QString username = ui->Username->text();
-    QString master = ui-> MasterPassword -> text();
 
     auto it = passwordStore.find({service.toStdString(), username.toStdString()});
-    if(it == passwordStore.end())
-    {
-        ui->StatusLabel->setText("Error: No password was saved for this user/service");
+    if(it == passwordStore.end()) {
+        ui->StatusLabel->setText("Error: No password saved for this service/user");
         return;
     }
 
     try {
-        std::string key(crypto_secretbox_KEYBYTES, 'K'); // same key
-        std::string decrypted = pm.decryptPassword(it->second, key);
-
+        std::string decrypted = pm.decryptPassword(it->second, sessionKey);
         ui->StatusLabel->setText("Password: " + QString::fromStdString(decrypted));
-    } catch (const std::exception &e) {
+    } catch(const std::exception &e) {
         ui->StatusLabel->setText("Error: " + QString::fromStdString(e.what()));
     }
 }

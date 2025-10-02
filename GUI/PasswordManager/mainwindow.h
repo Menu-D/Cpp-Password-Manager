@@ -14,6 +14,9 @@ QT_END_NAMESPACE
 class MainWindow : public QMainWindow
 {
 private:
+    std::string sessionKey; // This stores the derived key for the session
+    bool keySet = false; // Flag to make sure if the key has been set.
+
     std::map<std::pair<std::string, std::string>, std::string> passwordStore;
     Q_OBJECT
 
