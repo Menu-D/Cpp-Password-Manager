@@ -13,6 +13,6 @@ The idea was to make a password manager that stores an username + password in an
 
 # What does the program look like? 
 
-<img src="https://github.com/user-attachments/assets/2ab73a1a-045f-4aef-850d-6ead17c81542" width = "100" />
+<img src="https://github.com/user-attachments/assets/2ab73a1a-045f-4aef-850d-6ead17c81542" width = "500" />
 
 
