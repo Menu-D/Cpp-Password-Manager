@@ -35,7 +35,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    // Connect buttons to slots
+    // Connects the buttons to slots
     connect(ui->SavePasswordButton, &QPushButton::clicked,
             this, &MainWindow::onSavePasswordClicked);
 
